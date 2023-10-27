@@ -1,5 +1,6 @@
 from django.db import models
 from treebeard.mp_tree import MP_Node
+from djshop.apps.catalog.managers import CategoryQueryset
 
 
 class Category(MP_Node):
@@ -10,6 +11,8 @@ class Category(MP_Node):
 
     def __str__(self):
         return self.title
+
+    objects = CategoryQueryset.as_manager()
 
     class Meta:
         verbose_name = "Category"
