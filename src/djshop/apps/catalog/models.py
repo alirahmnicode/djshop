@@ -46,8 +46,13 @@ class ProductClass(models.Model):
     title = models.CharField(max_length=255, db_index=True)
     description = models.CharField(max_length=2048, null=True, blank=True)
     slug = models.SlugField(unique=True, allow_unicode=True)
+    options = models.ManyToManyField("Option", blank=True)
     track_stock = models.BooleanField(default=True)
     require_shipping = models.BooleanField(default=True)
+
+    @property
+    def has_attribute(self):
+        return self.attributes.exists()
 
     def __str__(self) -> str:
         return self.title
@@ -77,7 +82,6 @@ class ProductAttribute(models.Model):
         choices=AttributeTypeChioce.choices,
         default=AttributeTypeChioce.text,
     )
-    options = models.ManyToManyField("Option")
     option_group = models.ForeignKey(
         OptionGroup,
         on_delete=models.PROTECT,
