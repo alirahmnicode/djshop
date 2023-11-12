@@ -161,6 +161,13 @@ class Product(models.Model):
         ProductAttribute, through="ProductAttributeValue"
     )
 
+    @property
+    def main_image(self):
+        if self.images.existe():
+            return self.images.first()
+        else:
+            return None
+    
     class Meta:
         verbose_name = "Product"
         verbose_name_plural = "Products"
@@ -181,3 +188,20 @@ class ProductAttributeValue(models.Model):
         verbose_name = "Attribute Value"
         verbose_name_plural = "Attribute Values"
         unique_together = ('product', 'attribute')
+
+
+class ProductImage(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="images")
+    image = models.ForeignKey("media.Image", on_delete=models.PROTECT)
+
+    display_order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ("display_order",)
+    
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
+
+        for i, image in enumerate(self.product.images.all()):
+            image.display_order = i
+            image.save()
