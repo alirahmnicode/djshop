@@ -1,6 +1,7 @@
 from django.db import models
 from treebeard.mp_tree import MP_Node
 from djshop.apps.catalog.managers import CategoryQueryset
+from djshop.libs.db.models import AuditableModel
 
 
 class Category(MP_Node):
@@ -128,7 +129,7 @@ class Option(models.Model):
         verbose_name_plural = "Options"
 
 
-class Product(models.Model):
+class Product(AuditableModel):
     class ProductTypeChiose(models.TextChoices):
         standalone = "standalone"
         parent = "parent"
