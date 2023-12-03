@@ -3,7 +3,7 @@ from django.db.models import Count
 from treebeard.admin import TreeAdmin
 from treebeard.forms import movenodeform_factory
 
-from djshop.apps.catalog.models import Category, ProductClass, Option, ProductAttribute
+from djshop.apps.catalog.models import Category, Product, ProductAttributeValue, ProductClass, Option, ProductAttribute, ProductImage
 
 
 class CategoryAdmin(TreeAdmin):
@@ -56,6 +56,27 @@ class ProductClassAdmin(admin.ModelAdmin):
 
     def enable_track_stock(self, request, queryset):
         queryset.update(track_stock=True)
+
+
+class ProductAttributeInline(admin.TabularInline):
+    model = ProductAttributeValue
+    extra = 2
+
+
+class ProductImageInline(admin.TabularInline):
+    model = ProductImage
+    extra = 2
+
+
+@admin.register(Product)
+class ProductAdmin(admin.ModelAdmin):
+    list_display = (
+        "title",
+        "slug",
+    )
+    prepopulated_fields = {"slug": ("title",)}
+    inlines = [ProductAttributeInline, ProductImageInline]
+
 
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Option)

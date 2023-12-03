@@ -161,6 +161,7 @@ class Product(AuditableModel):
     attributes = models.ManyToManyField(
         ProductAttribute, through="ProductAttributeValue"
     )
+    category = models.ManyToManyField(Category, related_name="categories")
 
     @property
     def main_image(self):

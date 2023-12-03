@@ -37,7 +37,7 @@ class Image(models.Model):
 
 @receiver(pre_save, sender=Image)
 def check_duplicate_hash(sender, instance, **kwargs):
-    existed = Image.objects.filter(file_hash=instance.file_hash).exists()
+    existed = Image.objects.filter(file_hash=instance.file_hash).exclude(pk=instance.pk).exists()
 
     if existed:
         raise DuplicateImageException("Duplicate image cannot save")

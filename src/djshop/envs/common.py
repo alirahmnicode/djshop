@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     
     "djshop.apps.catalog",
     "djshop.apps.media",
+    "djshop.apps.inventory"
 ]
 
 MIDDLEWARE = [
